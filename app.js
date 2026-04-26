@@ -897,62 +897,47 @@ const ItineraryTab = ({
                 return (
                   <div key={spot.id} className="relative group mb-10 last:mb-0">
                     <div
-                      className={`absolute -left-[31px] top-8 w-4 h-4 rounded-full border-4 z-10 transition-all ${
+                      className={`absolute -left-[31px] top-8 w-5 h-5 rounded-full border-4 z-10 transition-all ${
                         spot.isDeparted
-                          ? "bg-gray-300 border-gray-200"
-                          : "bg-white border-[#E4C2C1] shadow-[0_0_0_3px_rgba(228,194,193,0.3)]"
+                          ? "bg-gray-400 border-gray-200"
+                          : "bg-white border-indigo-500 shadow-[0_0_0_3px_rgba(99,102,241,0.2)]"
                       }`}
                     ></div>
                     <div
-                      className={`glass-panel rounded-[2rem] p-6 mb-0 border transition-all ${
+                      className={`rounded-2xl p-6 mb-0 border-2 transition-all shadow-md ${
                         spot.isDeparted
-                          ? "opacity-60 bg-gray-50 grayscale"
-                          : "bg-white hover:border-[#E4C2C1] hover:shadow-lg"
+                          ? "opacity-60 bg-gray-50 grayscale border-gray-200"
+                          : "bg-white border-gray-200 hover:border-indigo-300 hover:shadow-lg"
                       }`}
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="bg-gray-100 px-3 py-1.5 rounded-xl border border-gray-200 flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">
-                            {index === 0 ? "出發" : "抵達"}
+                      {/* 時間顯示 - 放大字體 */}
+                      <div className="flex items-baseline gap-2 bg-gray-100 px-4 py-2 rounded-xl border border-gray-200 mb-4 inline-flex">
+                        <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">
+                          {index === 0 ? "出發" : "抵達"}
+                        </span>
+                        {index === 0 ? (
+                          <input
+                            type="time"
+                            value={dayStartTimes[day.dayId] || "09:00"}
+                            onChange={(e) =>
+                              handleDayStartTimeChange(day.dayId, e.target.value)
+                            }
+                            className="bg-transparent font-mono font-black text-2xl text-gray-900 w-24 outline-none"
+                          />
+                        ) : (
+                          <span className="font-mono font-black text-2xl text-gray-900">
+                            {spot.time}
                           </span>
-                          {index === 0 ? (
-                            <input
-                              type="time"
-                              value={dayStartTimes[day.dayId] || "09:00"}
-                              onChange={(e) =>
-                                handleDayStartTimeChange(
-                                  day.dayId,
-                                  e.target.value
-                                )
-                              }
-                              className="bg-transparent font-mono font-bold text-lg text-gray-700 w-20 outline-none"
-                            />
-                          ) : (
-                            <span className="font-mono font-bold text-lg text-gray-700">
-                              {spot.time}
-                            </span>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => handleDepartureToggle(spot.id)}
-                          className={`px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm active:scale-95 ${
-                            spot.isDeparted
-                              ? "bg-white border border-gray-200 text-gray-400"
-                              : "bg-[#E4C2C1] text-white hover:brightness-105"
-                          }`}
-                        >
-                          {spot.isDeparted
-                            ? `已出發 ${spot.actualDepTime}`
-                            : "確認動身"}
-                        </button>
+                        )}
                       </div>
 
                       <div>
-                        <h3 className="text-xl font-black text-gray-800 mb-2">
+                        {/* 景點名稱 - 加大加粗 */}
+                        <h3 className="text-2xl font-black text-gray-900 mb-2">
                           {spot.name}
                         </h3>
-                        <div className="flex items-center gap-4 text-xs font-bold text-gray-500 mb-4">
-                          <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg border border-gray-200">
+                        <div className="flex items-center gap-4 text-sm font-bold text-gray-600 mb-4">
+                          <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200">
                             <Icons.Clock size={12} />
                             <span>停留</span>
                             <select
@@ -985,9 +970,9 @@ const ItineraryTab = ({
                                     <span className="font-mono font-bold text-[#E4C2C1]">NT${currentTicket.adult.toLocaleString()}</span>
                                     <span className="text-gray-400">×</span>
                                     <div className="flex items-center bg-white border rounded-lg px-1 shadow-sm">
-                                      <button onClick={() => updateSpotTicketCount(spot.id, "adult", -1)} className="text-gray-400 hover:text-[#E4C2C1] px-1 font-bold">-</button>
-                                      <span className="text-gray-800 font-bold px-1">{counts.adult}</span>
-                                      <button onClick={() => updateSpotTicketCount(spot.id, "adult", 1)} className="text-gray-400 hover:text-[#E4C2C1] px-1 font-bold">+</button>
+                                      <button onClick={() => updateSpotTicketCount(spot.id, "adult", -1)} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-gray-300 rounded-xl text-xl text-gray-700 active:bg-gray-200 shadow-sm font-bold">-</button>
+                                      <span className="text-gray-900 font-black px-2 text-lg">{counts.adult}</span>
+                                      <button onClick={() => updateSpotTicketCount(spot.id, "adult", 1)} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-gray-300 rounded-xl text-xl text-gray-700 active:bg-gray-200 shadow-sm font-bold">+</button>
                                     </div>
                                     <span className="text-gray-400">晚</span>
                                   </div>
@@ -1008,9 +993,9 @@ const ItineraryTab = ({
                                       <span className="font-mono font-bold text-[#E4C2C1]">NT${currentTicket.adult.toLocaleString()}</span>
                                       <span className="text-gray-400">×</span>
                                       <div className="flex items-center bg-white border rounded-lg px-1 shadow-sm">
-                                        <button onClick={() => updateSpotTicketCount(spot.id, "adult", -1)} className="text-gray-400 hover:text-[#E4C2C1] px-1 font-bold">-</button>
-                                        <span className="text-gray-800 font-bold px-1">{counts.adult}</span>
-                                        <button onClick={() => updateSpotTicketCount(spot.id, "adult", 1)} className="text-gray-400 hover:text-[#E4C2C1] px-1 font-bold">+</button>
+                                        <button onClick={() => updateSpotTicketCount(spot.id, "adult", -1)} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-gray-300 rounded-xl text-xl text-gray-700 active:bg-gray-200 shadow-sm font-bold">-</button>
+                                        <span className="text-gray-900 font-black px-2 text-lg">{counts.adult}</span>
+                                        <button onClick={() => updateSpotTicketCount(spot.id, "adult", 1)} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-gray-300 rounded-xl text-xl text-gray-700 active:bg-gray-200 shadow-sm font-bold">+</button>
                                       </div>
                                     </div>
                                     {currentTicket.child > 0 && (
@@ -1019,9 +1004,9 @@ const ItineraryTab = ({
                                         <span className="font-mono font-bold text-[#A9BFA8]">NT${currentTicket.child.toLocaleString()}</span>
                                         <span className="text-gray-400">×</span>
                                         <div className="flex items-center bg-white border rounded-lg px-1 shadow-sm">
-                                          <button onClick={() => updateSpotTicketCount(spot.id, "child", -1)} className="text-gray-400 hover:text-[#A9BFA8] px-1 font-bold">-</button>
-                                          <span className="text-gray-800 font-bold px-1">{counts.child}</span>
-                                          <button onClick={() => updateSpotTicketCount(spot.id, "child", 1)} className="text-gray-400 hover:text-[#A9BFA8] px-1 font-bold">+</button>
+                                          <button onClick={() => updateSpotTicketCount(spot.id, "child", -1)} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-gray-300 rounded-xl text-xl text-gray-700 active:bg-gray-200 shadow-sm font-bold">-</button>
+                                          <span className="text-gray-900 font-black px-2 text-lg">{counts.child}</span>
+                                          <button onClick={() => updateSpotTicketCount(spot.id, "child", 1)} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-gray-300 rounded-xl text-xl text-gray-700 active:bg-gray-200 shadow-sm font-bold">+</button>
                                         </div>
                                       </div>
                                     )}
@@ -1051,7 +1036,7 @@ const ItineraryTab = ({
                           <a
                             href={spot.gmapLink}
                             target="_blank"
-                            className="flex-1 bg-gray-50 text-gray-500 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors border border-gray-100"
+                            className="flex-1 bg-gray-100 text-gray-700 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 active:bg-gray-200 transition border-2 border-gray-200"
                           >
                             <Icons.MapPin
                               size={14}
@@ -1061,28 +1046,42 @@ const ItineraryTab = ({
                           </a>
                           <button
                             onClick={() => openExpenseModal(spot)}
-                            className="flex-1 bg-[#F9F3F3] text-[#E4C2C1] py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-[#E4C2C1] hover:text-white transition-colors border border-[#E4C2C1]/20"
+                            className="flex-1 bg-gray-100 text-gray-700 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 active:bg-gray-200 transition border-2 border-gray-200"
                           >
                             <Icons.Wallet size={14} /> 記帳
                           </button>
                         </div>
 
                         {(spotTotal > 0 || ticketTotal > 0) && (
-                          <div className="mt-3 pt-2 border-t border-dashed border-gray-200 text-right">
-                            <span className="text-[10px] text-gray-400 mr-2 uppercase">
+                          <div className="mt-3 pt-3 border-t-2 border-gray-200 text-right">
+                            <span className="text-xs text-gray-500 mr-2 font-bold">
                               小計
                             </span>
-                            <span className="text-sm font-mono font-bold text-[#FF6B6B]">
+                            <span className="text-xl font-mono font-black text-indigo-700">
                               NT${(spotTotal + ticketTotal).toLocaleString()}
                             </span>
                           </div>
                         )}
+
+                        {/* 確認動身 - 滿版大按鈕 */}
+                        <button
+                          onClick={() => handleDepartureToggle(spot.id)}
+                          className={`w-full mt-5 py-4 rounded-xl font-black text-lg shadow-lg transition-all active:scale-95 ${
+                            spot.isDeparted
+                              ? "bg-green-600 text-white shadow-green-600/30"
+                              : "bg-gray-900 text-white shadow-gray-900/30"
+                          }`}
+                        >
+                          {spot.isDeparted
+                            ? `✅ 已動身 ${spot.actualDepTime}`
+                            : "確認動身"}
+                        </button>
                       </div>
                     </div>
 
                     {spot.nextStop && (
                       <div className="py-4 flex flex-col items-center">
-                        <div className="bg-white border border-gray-200 rounded-xl p-3 w-full max-w-[260px] text-center shadow-md relative z-10">
+                        <div className="bg-white border-2 border-indigo-200 rounded-2xl p-4 w-full max-w-[280px] text-center shadow-md relative z-10">
                           <div className="text-[10px] text-gray-400 font-bold uppercase mb-1 flex justify-between px-2">
                             <span>NEXT</span>
                             <span>{spot.nextStop.distance}</span>
@@ -1112,7 +1111,7 @@ const ItineraryTab = ({
                             <a
                               href={spot.nextStop.navLink}
                               target="_blank"
-                              className="text-[10px] bg-gray-800 text-white px-3 py-1 rounded-full hover:bg-gray-700 transition-colors"
+                              className="flex items-center gap-1 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform text-sm"
                             >
                               導航
                             </a>
@@ -1709,7 +1708,7 @@ const WishlistTab = ({ aiLoading, setAiLoading, openKeyModal }) => {
               <a
                 href={gmapLink}
                 target="_blank"
-                className="flex-1 bg-gray-50 text-gray-500 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors border border-gray-100"
+                className="flex-1 bg-gray-100 text-gray-700 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 active:bg-gray-200 transition border-2 border-gray-200"
               >
                 <Icons.MapPin size={14} className="text-[#A9BFA8]" /> 地圖
               </a>
@@ -2434,46 +2433,46 @@ ${JSON.stringify(hotelWithDates)}
           />
         )}
       </main>
-      <div className="fixed bottom-0 w-full bg-[#F9F7F5]/95 backdrop-blur-md border-t border-gray-200 pb-safe z-40 flex justify-around py-3 text-xs font-bold text-gray-400">
+      <div className="fixed bottom-0 w-full bg-white/95 backdrop-blur-md border-t-2 border-gray-200 pb-safe z-40 flex justify-around py-3 text-xs font-bold text-gray-500">
         <button
           onClick={() => setActiveTab("itinerary")}
-          className={`flex flex-col items-center gap-1 ${
-            activeTab === "itinerary" ? "text-[#E4C2C1]" : "hover:text-gray-600"
+          className={`flex flex-col items-center gap-1 p-2 ${
+            activeTab === "itinerary" ? "text-indigo-600" : "hover:text-gray-900"
           }`}
         >
-          <Icons.List size={22} /> 行程
+          <Icons.List size={26} /> 行程
         </button>
         <button
           onClick={() => setActiveTab("info")}
-          className={`flex flex-col items-center gap-1 ${
-            activeTab === "info" ? "text-[#A9BFA8]" : "hover:text-gray-600"
+          className={`flex flex-col items-center gap-1 p-2 ${
+            activeTab === "info" ? "text-indigo-600" : "hover:text-gray-900"
           }`}
         >
-          <Icons.LayoutGrid size={22} /> 資訊
+          <Icons.LayoutGrid size={26} /> 資訊
         </button>
         <button
           onClick={() => setActiveTab("stats")}
-          className={`flex flex-col items-center gap-1 ${
-            activeTab === "stats" ? "text-[#E8D595]" : "hover:text-gray-600"
+          className={`flex flex-col items-center gap-1 p-2 ${
+            activeTab === "stats" ? "text-indigo-600" : "hover:text-gray-900"
           }`}
         >
-          <Icons.Calculator size={22} /> 統計
+          <Icons.Calculator size={26} /> 統計
         </button>
         <button
           onClick={() => setActiveTab("guard")}
-          className={`flex flex-col items-center gap-1 ${
-            activeTab === "guard" ? "text-[#A2C4C9]" : "hover:text-gray-600"
+          className={`flex flex-col items-center gap-1 p-2 ${
+            activeTab === "guard" ? "text-indigo-600" : "hover:text-gray-900"
           }`}
         >
-          <Icons.Shield size={22} /> 防雷
+          <Icons.Shield size={26} /> 防雷
         </button>
         <button
           onClick={() => setActiveTab("wishlist")}
-          className={`flex flex-col items-center gap-1 ${
-            activeTab === "wishlist" ? "text-[#E4C2C1]" : "hover:text-gray-600"
+          className={`flex flex-col items-center gap-1 p-2 ${
+            activeTab === "wishlist" ? "text-indigo-600" : "hover:text-gray-900"
           }`}
         >
-          <Icons.Heart size={22} /> 願望
+          <Icons.Heart size={26} /> 願望
         </button>
       </div>
       <ApiKeyModal
