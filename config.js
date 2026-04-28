@@ -1,10 +1,10 @@
 // ==========================================
 // config.js - 2026 台南親子遊行程資料
-// Generated from: 2026台南親子遊.kmz
+// Generated from: 2026台南親子遊(3).kmz
 // ==========================================
 
 // 1. APP 基本設定
-window.TRIP_ID = "2026-tainan-0430"; // 格式: YYYY-地點-MMDD，換行程時改這裡
+window.TRIP_ID = "2026-tainan-0430-v3";
 window.APP_TITLE = "2026 台南親子遊";
 window.APP_LOGO = "logo.jpg";
 
@@ -14,195 +14,65 @@ window.CURRENCY_OPTIONS = [
   { code: "USD", symbol: "$", label: "美金" },
 ];
 
-window.STAY_OPTIONS = [
-  "30 min",
-  "1 hr",
-  "1.5 hr",
-  "2 hr",
-  "2.5 hr",
-  "3 hr",
-  "4 hr",
-  "5 hr",
-  "Overnight",
-  "-",
-];
+window.STAY_OPTIONS = ["30 min","1 hr","1.5 hr","2 hr","2.5 hr","3 hr","4 hr","5 hr","Overnight","-"];
 
-// 2. 主行程資料 (從 KMZ 日期圖層轉換)
+// 2. 主行程資料
 window.RAW_KML_DATA = [
   {
-    dayId: "day1",
-    date: "4/30 (三)",
-    title: "南下探索之旅",
-    themeColor: "bg-[#E4C2C1]",
+    dayId: "day1", date: "4/30 (三)", title: "南下探索之旅", themeColor: "bg-[#E4C2C1]",
     spots: [
-      {
-        name: "溫暖的家",
-        lat: 25.0665561,
-        lon: 121.5105023,
-        desc: "旅程起點，出發！",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "自行車文化探索館",
-        lat: 24.2087665,
-        lon: 120.61127,
-        desc: "台中大甲，全台首座自行車互動體驗館。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "隆田文化資產教育園區",
-        lat: 23.1909581,
-        lon: 120.3190407,
-        desc: "台南官田，沉浸式互動體驗認識嘉南大圳歷史。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "海德沃福 (台南永康店)",
-        lat: 23.0027369,
-        lon: 120.234208,
-        desc: "HARD OFF 挖寶時間！",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "海德沃福 (台南東門店)",
-        lat: 22.9756673,
-        lon: 120.238219,
-        desc: "HARD OFF 東門分店，繼續挖寶。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "福爾摩沙遊艇酒店",
-        lat: 22.9989225,
-        lon: 120.1554594,
-        desc: "入住安平運河畔的遊艇主題飯店。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
+      { name: "延平北路三段104巷", lat: 25.0665561, lon: 121.5105023, desc: "旅程起點，出發！", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "自行車文化探索館", lat: 24.2087665, lon: 120.61127, desc: "台中大甲，全台首座自行車互動體驗館。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "隆田文化資產教育園區", lat: 23.1909581, lon: 120.3190407, desc: "台南官田，沉浸式互動體驗認識嘉南大圳歷史。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "海德沃福 (台南永康店)", lat: 23.0027369, lon: 120.234208, desc: "HARD OFF 挖寶時間！", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "海德沃福 (台南東門店)", lat: 22.9756673, lon: 120.238219, desc: "HARD OFF 東門分店，繼續挖寶。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "福爾摩沙遊艇酒店", lat: 22.9989225, lon: 120.1554594, desc: "入住安平運河畔的遊艇主題飯店。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
     ],
   },
   {
-    dayId: "day2",
-    date: "5/1 (四)",
-    title: "安平與北返",
-    themeColor: "bg-[#A9BFA8]",
+    dayId: "day2", date: "5/1 (四)", title: "安平古蹟巡禮", themeColor: "bg-[#A9BFA8]",
     spots: [
-      {
-        name: "安平定情碼頭德陽艦園區",
-        lat: 22.9891513,
-        lon: 120.1565805,
-        desc: "全台唯一的軍艦博物館，登上德陽艦甲板。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "海德沃福HARD OFF(台南頂美店)",
-        lat: 23.0021177,
-        lon: 120.1866696,
-        desc: "台南第三間 HARD OFF，最後機會挖寶。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "汴頭里",
-        lat: 23.3678557,
-        lon: 120.461686,
-        desc: "中途休息或用餐點。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
+      { name: "安平古堡", lat: 23.0015093, lon: 120.1606244, desc: "台灣第一座城堡，荷蘭時期建造的熱蘭遮城遺址。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "安平定情碼頭德陽艦園區", lat: 22.9891513, lon: 120.1565805, desc: "全台唯一的軍艦博物館，登上德陽艦甲板。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "海德沃福HARD OFF(台南頂美店)", lat: 23.0021177, lon: 120.1866696, desc: "台南第三間 HARD OFF，最後機會挖寶。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "汴頭里", lat: 23.3678557, lon: 120.461686, desc: "北返中途休息站。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
     ],
   },
   {
-    dayId: "day3",
-    date: "5/2 (五)",
-    title: "嘉義台中知識之旅",
-    themeColor: "bg-[#A2C4C9]",
+    dayId: "day3", date: "5/2 (五)", title: "嘉義台中知識之旅", themeColor: "bg-[#A2C4C9]",
     spots: [
-      {
-        name: "冷研碳索館",
-        lat: 23.4464166,
-        lon: 120.2709933,
-        desc: "嘉義大林，全台首座氣體主題觀光工廠。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "國立自然科學博物館",
-        lat: 24.1572335,
-        lon: 120.6660606,
-        desc: "台中北區，台灣最大的科學博物館。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
-      {
-        name: "約客厚禮築夢手創館",
-        lat: 24.3100553,
-        lon: 120.705433,
-        desc: "台中后里，DIY 手作體驗觀光工廠。",
-        mapCode: "GPS",
-        ticket: { adult: 0, child: 0 },
-      },
+      { name: "冷研碳索館", lat: 23.4464166, lon: 120.2709933, desc: "嘉義大林，全台首座氣體主題觀光工廠。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "國立自然科學博物館", lat: 24.1572335, lon: 120.6660606, desc: "台中北區，台灣最大的科學博物館。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "苗栗馥藝金鬱金香酒店", lat: 24.6908496, lon: 120.8906935, desc: "苗栗市區住宿，準備隔日行程。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+    ],
+  },
+  {
+    dayId: "day4", date: "5/3 (六)", title: "苗栗探險回程", themeColor: "bg-[#E8D595]",
+    spots: [
+      { name: "巴巴坑道休閒礦場", lat: 24.6460335, lon: 120.9994515, desc: "苗栗三灣，體驗礦坑文化的休閒園區。", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
+      { name: "延平北路三段104巷", lat: 25.0665561, lon: 121.5105023, desc: "回到溫暖的家，旅程結束！", mapCode: "GPS", ticket: { adult: 0, child: 0 } },
     ],
   },
 ];
 
-// 3. 願望清單 (從 KMZ pocket_list 圖層轉換)
+// 3. 願望清單
 window.WISHLIST_DATA = [
-  {
-    name: "中埔穀倉農創園區",
-    lat: 23.4472233,
-    lon: 120.4928316,
-    desc: "嘉義中埔，日式穀倉改建的文創園區。",
-  },
-  {
-    name: "點 9",
-    lat: 23.4472789,
-    lon: 120.4928371,
-    desc: "待確認景點。",
-  },
+  { name: "灣麗親子公園", lat: 24.4472842, lon: 120.656201, desc: "苗栗苑裡，大型戶外親子遊樂場。" },
+  { name: "中埔穀倉農創園區", lat: 23.4472233, lon: 120.4928316, desc: "嘉義中埔，日式穀倉改建的文創園區。" },
+  { name: "約客厚禮築夢手創館", lat: 24.3100553, lon: 120.705433, desc: "台中后里，DIY 手作體驗觀光工廠。" },
 ];
 
 // 4. 交通資訊
 window.FLIGHT_INFO = {
-  outbound: {
-    flight: "自駕",
-    airline: "交通",
-    from: "台北",
-    to: "台南",
-    dep: "07:00",
-    arr: "12:00",
-    date: "4/30 (三)",
-    duration: "~5h",
-  },
-  inbound: {
-    flight: "自駕",
-    airline: "交通",
-    from: "台中",
-    to: "台北",
-    dep: "16:00",
-    arr: "18:30",
-    date: "5/2 (五)",
-    duration: "~2.5h",
-  },
+  outbound: { flight: "自駕", airline: "交通", from: "台北", to: "台南", dep: "07:00", arr: "12:00", date: "4/30 (三)", duration: "~5h" },
+  inbound: { flight: "自駕", airline: "交通", from: "苗栗", to: "台北", dep: "14:00", arr: "16:00", date: "5/3 (六)", duration: "~2h" },
 };
 
 // 5. 住宿資訊
 window.HOTEL_INFO = [
-  {
-    day: "4/30",
-    name: "福爾摩沙遊艇酒店",
-    location: "台南安平",
-    desc: "遊艇主題親子飯店",
-    lat: 22.9989225,
-    lon: 120.1554594,
-  },
+  { day: "4/30", name: "福爾摩沙遊艇酒店", location: "台南安平", desc: "遊艇主題親子飯店", lat: 22.9989225, lon: 120.1554594 },
+  { day: "5/2", name: "苗栗馥藝金鬱金香酒店", location: "苗栗市", desc: "苗栗市區商務飯店", lat: 24.6908496, lon: 120.8906935 },
 ];
-
 // 6. 圖標庫 (Icons)
 const e = React.createElement;
 window.Icons = {
