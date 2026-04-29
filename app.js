@@ -104,6 +104,10 @@ const isHotel = (name) => {
   return false;
 };
 
+// ═══ Gemini Model Fallback Chain ═══
+const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-flash-latest", "gemini-2.0-flash"];
+let GEMINI_MODEL = localStorage.getItem("ft-gemini-model") || GEMINI_MODELS[0];
+
 const generateGeminiContent = async (
   prompt,
   base64Image = null,
@@ -111,9 +115,6 @@ const generateGeminiContent = async (
 ) => {
   const apiKey = localStorage.getItem("gemini_api_key") || "";
   if (!apiKey) throw new Error("NO_API_KEY");
-
-  const MODEL_NAME = "gemini-2.5-flash";
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
 
   const contents = [{ role: "user", parts: [{ text: prompt }] }];
   if (base64Image) {
@@ -128,27 +129,55 @@ const generateGeminiContent = async (
     tools: useSearch ? [{ google_search: {} }] : undefined,
   };
 
-  for (let i = 0; i < 3; i++) {
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        if (response.status === 429 && i < 2) {
-          await new Promise((r) => setTimeout(r, 2000));
+  let lastErr = null;
+  for (let mi = 0; mi < GEMINI_MODELS.length; mi++) {
+    const model = mi === 0 ? GEMINI_MODEL : GEMINI_MODELS[mi];
+    if (mi > 0 && model === GEMINI_MODEL) continue;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    for (let i = 0; i < 3; i++) {
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) {
+          if (model !== GEMINI_MODEL) {
+            GEMINI_MODEL = model;
+            try { localStorage.setItem("ft-gemini-model", model); } catch(e) {}
+            console.log("🔄 已切換到模型:", model);
+          }
+          const result = await response.json();
+          return result.candidates?.[0]?.content?.parts?.[0]?.text || "無內容生成";
+        }
+        const code = response.status;
+        if (code === 429 && i < 2) {
+          let waitMs = 2000 * (i + 1);
+          try {
+            const errData = await response.json();
+            const ri = errData?.error?.details?.find(d => d["@type"]?.includes("RetryInfo"));
+            if (ri?.retryDelay) { const m = ri.retryDelay.match(/(\d+(?:\.\d+)?)s/); if (m && parseFloat(m[1]) < 10) waitMs = Math.ceil(parseFloat(m[1]) * 1000) + 200; }
+          } catch(e) {}
+          console.log(`⏳ 429 retry ${i+1}/2, wait ${waitMs}ms`);
+          await new Promise((r) => setTimeout(r, waitMs));
           continue;
         }
-        throw new Error(`API Error: ${response.status}`);
+        if (code === 404) { lastErr = new Error(`MODEL_NOT_FOUND: ${model}`); break; }
+        if (code === 429) { throw new Error("QUOTA_EXHAUSTED: 配額用完，請稍後再試"); }
+        if (code === 400) {
+          try { const ed = await response.json(); if (ed?.error?.message?.includes("API key")) throw new Error("BAD_API_KEY"); } catch(e) { if (e.message === "BAD_API_KEY") throw e; }
+        }
+        throw new Error(`API Error: ${code}`);
+      } catch (error) {
+        if (error.message === "NO_API_KEY" || error.message === "BAD_API_KEY" || error.message.startsWith("QUOTA_EXHAUSTED")) throw error;
+        lastErr = error;
+        if (i === 2) break;
+        await new Promise((r) => setTimeout(r, 1000));
       }
-      const result = await response.json();
-      return result.candidates?.[0]?.content?.parts?.[0]?.text || "無內容生成";
-    } catch (error) {
-      if (i === 2) throw error;
-      await new Promise((r) => setTimeout(r, 1000));
     }
   }
+  throw lastErr || new Error("ALL_MODELS_FAILED");
 };
 
 const timeToMinutes = (t) => {
@@ -252,6 +281,10 @@ const ApiKeyModal = ({ isOpen, onClose }) => {
           >
             儲存
           </button>
+        </div>
+        <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+          <span>🤖 模型：<code className="text-[#4ECDC4]">{GEMINI_MODEL}</code></span>
+          <button onClick={() => { GEMINI_MODEL = GEMINI_MODELS[0]; localStorage.setItem("ft-gemini-model", GEMINI_MODELS[0]); alert("已重設為 " + GEMINI_MODELS[0]); }} className="px-2 py-0.5 rounded border border-slate-600 text-slate-400 hover:text-white">重設</button>
         </div>
       </div>
     </div>
@@ -1431,7 +1464,7 @@ const GuardTab = ({
       setFlightAnalysis(res);
     } catch (e) {
       setFlightAnalysis("分析失敗");
-      if (e.message.includes("NO_API_KEY")) openKeyModal(true);
+      if (e.message.includes("NO_API_KEY") || e.message === "BAD_API_KEY") openKeyModal(true); else if (e.message.startsWith("QUOTA_EXHAUSTED")) alert("⏳ Gemini 配額用完，請稍後再試或明天 16:00 重置");
     }
     setAiLoading(false);
   };
@@ -1450,7 +1483,7 @@ const GuardTab = ({
       setHotelAnalysis((p) => ({ ...p, [h.name]: res }));
     } catch (e) {
       setHotelAnalysis((p) => ({ ...p, [h.name]: "分析失敗" }));
-      if (e.message.includes("NO_API_KEY")) openKeyModal(true);
+      if (e.message.includes("NO_API_KEY") || e.message === "BAD_API_KEY") openKeyModal(true); else if (e.message.startsWith("QUOTA_EXHAUSTED")) alert("⏳ Gemini 配額用完，請稍後再試或明天 16:00 重置");
     }
     setAiLoading(false);
   };
@@ -1470,7 +1503,7 @@ const GuardTab = ({
       setSpotAnalysis((p) => ({ ...p, [s.id]: res }));
     } catch (e) {
       setSpotAnalysis((p) => ({ ...p, [s.id]: "分析失敗" }));
-      if (e.message.includes("NO_API_KEY")) openKeyModal(true);
+      if (e.message.includes("NO_API_KEY") || e.message === "BAD_API_KEY") openKeyModal(true); else if (e.message.startsWith("QUOTA_EXHAUSTED")) alert("⏳ Gemini 配額用完，請稍後再試或明天 16:00 重置");
     }
     setAiLoading(false);
   };
@@ -1488,7 +1521,7 @@ const GuardTab = ({
       setAiGeneralResult(res);
     } catch (e) {
       setAiGeneralResult("分析失敗");
-      if (e.message.includes("NO_API_KEY")) openKeyModal(true);
+      if (e.message.includes("NO_API_KEY") || e.message === "BAD_API_KEY") openKeyModal(true); else if (e.message.startsWith("QUOTA_EXHAUSTED")) alert("⏳ Gemini 配額用完，請稍後再試或明天 16:00 重置");
     }
     setAiLoading(false);
   };
@@ -1647,7 +1680,7 @@ const WishlistTab = ({ aiLoading, setAiLoading, openKeyModal }) => {
       setSpotInfo((p) => ({ ...p, [key]: res }));
     } catch (e) {
       setSpotInfo((p) => ({ ...p, [key]: "查詢失敗，請確認 API Key。" }));
-      if (e.message.includes("NO_API_KEY")) openKeyModal(true);
+      if (e.message.includes("NO_API_KEY") || e.message === "BAD_API_KEY") openKeyModal(true); else if (e.message.startsWith("QUOTA_EXHAUSTED")) alert("⏳ Gemini 配額用完，請稍後再試或明天 16:00 重置");
     }
     setAiLoading(false);
   };
